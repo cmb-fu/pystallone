@@ -12,8 +12,4 @@ class TestInitWithArgs(unittest.TestCase):
         a = pystallone.API.doublesNew.array(10)
         
         self.assertEqual(10, a.size())
-    
-    def tearDown(self):
-        import pystallone
-        pystallone.shutdownJVM()
         
