@@ -23,6 +23,7 @@ moved from emma2 on 8.8.2014
 
 from jpype import \
  startJVM as _startJVM, \
+ isJVMStarted, \
  shutdownJVM, \
  getDefaultJVMPath, \
  JavaException, \
@@ -31,6 +32,7 @@ from jpype import \
 
 import numpy as _np
 import sys as _sys
+import warnings as _warnings
 
 _64bit = _sys.maxsize > 2**32
 
@@ -74,6 +76,7 @@ def startJVM(jvm = None, args = None):
         else:
             sep = ';'
         
+        # TODO: howto handle filename?
         stallone_jar = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
         stallone_jar_file = pkg_resources.resource_filename('pystallone', stallone_jar)
         if not os.path.exists(stallone_jar_file):
@@ -168,8 +171,8 @@ def ndarray_to_stallone_array(pyarray, copy=True):
         _warnings.warn("Upcasting floats to doubles!")
         pyarray = pyarray.astype(_np.float64)
     if dtype == _np.int64:
-        _warnings.warn("Downcasting long to 32 bit integer!"
-                      "You will loose precision by doing so!")
+        _warnings.warn("Downcasting long to 32 bit integer."
+                       " You will loose precision by doing so!")
         pyarray = pyarray.astype(_np.int32)
         
     # Pass memory to jpype and create a java array.
@@ -235,44 +238,40 @@ def stallone_array_to_ndarray(stArray):
                                 stallone.api.doubles.IDoubleArray)):
         raise TypeError('can only convert pystallone IDouble- or IIntArrays')
     
+    # TODO: support sparse
+    # isSparse = d_arr.isSparse()
+    
+    # if jpype was built against numpy, we directly obtain a numpy array with correct shape here.
+    sequence = stArray.getArray()[:]
+    
+    if type(sequence) is type(_np.ndarray):
+        return sequence
+    
+    # construct an ndarray using a slice of sequence
     dtype = None
 
     if type(stArray) == stallone.api.doubles.IDoubleArray:
         dtype = _np.float64
     elif type(stArray) == stallone.api.ints.IIntArray:
-        if _64bit:
-            dtype = _np.int64
-        else:
-            dtype = _np.int32
+        dtype = _np.int32
 
-    d_arr = stArray
-    rows = d_arr.rows()
-    cols = d_arr.columns()
-    order = d_arr.order() 
-    
-    # TODO: support sparse
-    # isSparse = d_arr.isSparse()
-    
-    # construct an ndarray using a slice onto the JArray
-    # make sure to always use slices, if you want to access ranges (0:n), else
-    # an getter for every single element will be called and you can you will wait for ages.
-    if order < 2:
-        jarr = d_arr.getArray()
-        arr = _np.array(jarr[0:len(jarr)], dtype=dtype, copy=False)
-    elif order == 2:
-        jarr = d_arr.getArray()
-        arr = _np.array(jarr[0:len(jarr)], dtype=dtype, copy=False)
-        #arr = _np.array(jarr[0:len(jarr)], copy=False)
-        #arr = _np.zeros((rows,cols))
-    else:
-        raise NotImplementedError
+    rows = stArray.rows()
+    cols = stArray.columns()
+    order = stArray.order()
     
     if cols > 1:
         shape = (rows, cols)
     else:
         shape = (rows,)
-
-    return arr.reshape(shape)
+    
+    if order < 2:
+        np_array = _np.array(sequence, dtype=dtype)
+    elif order == 2:
+        np_array = _np.array(sequence, dtype=dtype)
+    else:
+        raise NotImplementedError('only 1- and 2-d arrays supported.')
+    
+    return np_array.reshape(shape)
 
 
 def list1d_to_java_array(a):
