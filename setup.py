@@ -3,7 +3,10 @@ PyStallone setup
 """
 from setuptools import setup 
 import os
+import sys
 
+# support python 2 and 3
+jpype_species = 'JPype1>=0.5.5.3' if sys.version_info[0] == 2 else 'JPype1-py3>=0.5.5.2'
 
 metadata = dict(
     name = 'pystallone',
@@ -17,7 +20,7 @@ metadata = dict(
     package_data = {'pystallone' : ['stallone-current-jar-with-dependencies.jar',
                                     'include/jni.h',
                                     'include/jni_md.h']},
-    install_requires = ['JPype1 >= 0.5.5.3',
+    install_requires = [jpype_species,
                         'numpy >= 1.6.0'],
 )
 
