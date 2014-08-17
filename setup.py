@@ -14,7 +14,7 @@ def read(filename):
 def download_library():
     import urllib2 as www
     import hashlib
-    print "downloading current jar library...."
+    print("downloading current jar library....")
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
     try:
         data = www.urlopen(base_url + jar_name).read()  
@@ -28,12 +28,12 @@ def download_library():
         file.write(data)
         
     except IOError as ioe:
-        print "error during download/saving jar:\n", ioe
+        print("error during download/saving jar:\n", ioe)
         sys.exit(1)
     except RuntimeError as re:
-        print "error during validation:\n", re
+        print("error during validation:\n", re)
         sys.exit(2)
-    print "finished"
+    print("finished")
 
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
 

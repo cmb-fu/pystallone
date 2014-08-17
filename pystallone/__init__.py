@@ -121,7 +121,7 @@ def startJVM(jvm = None, args = None):
         cp_ind = -1
         
         # search for classpath definition and extend it, if found.
-        for i in xrange(n):
+        for i in range(n):
             cp_ind = args[i].find('-Djava.class.path=')# or args[i].find('cp')
             # append stallone jar to classpath
             if cp_ind != -1:
