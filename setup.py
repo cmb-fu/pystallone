@@ -35,6 +35,10 @@ def download_library():
     except RuntimeError as re:
         print("error during validation:\n", re)
         sys.exit(2)
+    except:
+        print("unknown exception occurred!!")
+        sys.exit(3)
+
     print("finished")
 
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
