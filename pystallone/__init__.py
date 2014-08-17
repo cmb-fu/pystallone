@@ -1,4 +1,7 @@
 '''
+PyStallone
+==========
+
 This package provides a python wrapper to run the Java Stallone library.
 
 The API variable is the main entry point into the Stallone API factory. This
@@ -7,13 +10,25 @@ io, constructing (hidden/projected) Markov models and various related tasks.
 
 
 Examples
---------
+========
+
+Datatypes
+---------
 create a double vector and assigning values:
->>> from emma2.util.pystallone import stallone as st
+>>> from pystallone import stallone as st
 >>> x = st.api.API.doublesNew.array(10) # create double array with 10 elements
 >>> x.set(5, 23.0) # set index 5 to 23.0
 >>> print(x)
 0.0     0.0     0.0     0.0     0.0     23.0     0.0     0.0     0.0     0.0
+
+# TODO: add more examples (doctests)
+
+Algebra
+-------
+
+Markov modeling
+---------------
+
 
 Created on 15.10.2013
 moved from emma2 on 8.8.2014
@@ -35,7 +50,11 @@ import sys as _sys
 import warnings as _warnings
 
 _64bit = _sys.maxsize > 2**32
+del _sys
 
+"""
+types wrapped in stallone java library
+"""
 _supported_types = [_np.int32, _np.int64, _np.float32, _np.float64]
 
 """ stallone java package. Should be used to access all classes in the stallone library."""
@@ -65,6 +84,9 @@ def startJVM(jvm = None, args = None):
     
     if not jvm:
         jvm = getDefaultJVMPath()
+        
+    if not args:
+        args = []
     
     def append_to_classpath(args):
         """
@@ -273,7 +295,7 @@ def stallone_array_to_ndarray(stArray):
     
     return np_array.reshape(shape)
 
-
+# FIXME: all functions below assume, that 1d/2d arrays/lists have at least one element, which will raise in case of empty ones.
 def list1d_to_java_array(a):
     """
     Converts python list of primitive int or double to java array
