@@ -11,6 +11,36 @@ jpype_species = 'JPype1>=0.5.5.4' if sys.version_info[0] == 2 else 'JPype1-py3>=
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
 
+def download_library():
+    import urllib2 as www
+    import hashlib
+    print "downloading current jar library...."
+    base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
+    try:
+        data = www.urlopen(base_url + jar_name).read()  
+        checksum = www.urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
+        current = hashlib.sha256(data).hexdigest()
+        if not current == checksum:
+            raise RuntimeError('downloaded jar has invalid checksum.'
+                               ' Is:\n"%s"\nShould be:\n"%s"' % (current, checksum))
+        # write jar to pystallone/
+        file = open(os.path.join('pystallone', jar_name), 'w')
+        file.write(data)
+        
+    except IOError as ioe:
+        print "error during download/saving jar:\n", ioe
+        sys.exit(1)
+    except RuntimeError as re:
+        print "error during validation:\n", re
+        sys.exit(2)
+    print "finished"
+
+jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
+
+# TODO: move destination of jar to maven central and validate via gpg
+if not os.path.exists(os.path.join('pystallone', jar_name)):
+    download_library()
+
 metadata = dict(
     name = 'pystallone',
     version = '1.0-SNAPSHOT',
@@ -21,7 +51,7 @@ metadata = dict(
     maintainer = 'Martin K. Scherer',
     author_email = 'stallone@lists.fu-berlin.de',
     packages = ['pystallone'],
-    package_data = {'pystallone' : ['stallone-current-jar-with-dependencies.jar',
+    package_data = {'pystallone' : [jar_name,
                                     'include/jni.h',
                                     'include/jni_md.h']},
     install_requires = [jpype_species,

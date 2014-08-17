@@ -1,2 +1,2 @@
 graft doc
-LICENSE.rst
+include LICENSE.rst
