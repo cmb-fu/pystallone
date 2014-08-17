@@ -8,11 +8,15 @@ import sys
 # support python 2 and 3
 jpype_species = 'JPype1>=0.5.5.4' if sys.version_info[0] == 2 else 'JPype1-py3>=0.5.5.2'
 
+def read(filename):
+    return open(os.path.join(os.path.dirname(__file__), filename)).read()
+
 metadata = dict(
     name = 'pystallone',
     version = '1.0-SNAPSHOT',
-    # TODO: add url
-    url = '',
+    description = 'Python binding for Stallone java library',
+    long_description = read('README.rst'),
+    url = 'http://bitbucket.org/cmb-fu/stallone',
     author = 'Frank Noe, Martin K. Scherer',
     maintainer = 'Martin K. Scherer',
     author_email = 'stallone@lists.fu-berlin.de',
@@ -22,7 +26,8 @@ metadata = dict(
                                     'include/jni_md.h']},
     install_requires = [jpype_species,
                         'numpy >= 1.6.0'],
-                
+    keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
+    license='Simplified BSD License',
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
