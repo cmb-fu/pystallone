@@ -41,7 +41,7 @@ jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
 
 # TODO: move destination of jar to maven central and validate via gpg
 dest = os.path.join('pystallone', jar_name)
-if not os.path.exists():
+if not os.path.exists(dest):
     download_library()
     assert os.path.exists(dest)
 
