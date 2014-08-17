@@ -24,7 +24,9 @@ def download_library():
             raise RuntimeError('downloaded jar has invalid checksum.'
                                ' Is:\n"%s"\nShould be:\n"%s"' % (current, checksum))
         # write jar to pystallone/
-        file = open(os.path.join('pystallone', jar_name), 'w')
+        dest = os.path.abspath(os.path.join('pystallone', jar_name))
+        print("writing to %s" % dest)
+        file = open(dest, 'w')
         file.write(data)
         
     except IOError as ioe:
@@ -38,8 +40,10 @@ def download_library():
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
 
 # TODO: move destination of jar to maven central and validate via gpg
-if not os.path.exists(os.path.join('pystallone', jar_name)):
+dest = os.path.join('pystallone', jar_name)
+if not os.path.exists():
     download_library()
+    assert os.path.exists(dest)
 
 metadata = dict(
     name = 'pystallone',
