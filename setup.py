@@ -16,14 +16,18 @@ def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
 
 def download_library():
-    import urllib2 as www
     import hashlib
+    try:
+        from urllib.request import urlopen
+    except ImportError:
+        from urllib2 import urlopen
+
     print("downloading current jar library....")
     # TODO: move destination of jar to maven central and validate via gpg
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
     try:
-        data = www.urlopen(base_url + jar_name).read()  
-        checksum = www.urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
+        data = urlopen(base_url + jar_name).read()  
+        checksum = urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
         current = hashlib.sha256(data).hexdigest()
         if not current == checksum:
             raise RuntimeError('downloaded jar has invalid checksum.'
