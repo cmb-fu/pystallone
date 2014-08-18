@@ -43,8 +43,8 @@ def download_library():
     except RuntimeError as re:
         print("error during validation:\n", re)
         sys.exit(2)
-    except:
-        print("unknown exception occurred!!")
+    except Exception as e:
+        print("unknown exception occurred:\n", e)
         sys.exit(3)
 
 
