@@ -10,7 +10,8 @@ jpype_species = 'JPype1>=0.5.5.4' if sys.version_info[0] == 2 else 'JPype1-py3>=
 
 # java library
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
-dest = os.path.abspath(os.path.join('pystallone', jar_name))
+
+dest = os.path.abspath(os.path.join(os.getcwd(),'pystallone', jar_name))
 
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
@@ -22,7 +23,7 @@ def download_library():
     except ImportError:
         from urllib2 import urlopen
 
-    print("downloading current jar library....")
+    print("downloading current jar library to %s" % dest)
     # TODO: move destination of jar to maven central and validate via gpg
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
     try:
@@ -33,7 +34,6 @@ def download_library():
             raise RuntimeError('downloaded jar has invalid checksum.'
                                ' Is:\n"%s"\nShould be:\n"%s"' % (current, checksum))
         # write jar to pystallone/
-        print("writing to %s" % dest)
         file = open(dest, 'w')
         file.write(data)
         print("finished")
