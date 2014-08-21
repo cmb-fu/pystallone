@@ -13,4 +13,4 @@ install:
   - "pip install ."
   
 # command to run tests
-script: pwd;ls -R;nosetests
+script: cd pystallone/tests && nosetests
