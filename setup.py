@@ -6,7 +6,8 @@ import os
 import sys
 
 # support python 2 and 3
-jpype_species = 'JPype1>=0.5.5.4' if sys.version_info[0] == 2 else 'JPype1-py3>=0.5.5.2'
+PY3 = (sys.version_info[0] >= 3)
+jpype_species = 'JPype1-py3>=0.5.5.2' if PY3 else 'JPype1>=0.5.5.4'
 
 # java library
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
@@ -18,24 +19,25 @@ def read(filename):
 
 def download_library():
     import hashlib
-    try:
-        from urllib.request import urlopen
-    except ImportError:
-        from urllib2 import urlopen
+    if sys.version_info >= (3,):
+        import urllib.request as urllib2
+    else:
+        import urllib2
 
     print("downloading current jar library to %s" % dest)
     # TODO: move destination of jar to maven central and validate via gpg
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
+    jar_url = base_url + jar_name
     try:
-        data = urlopen(base_url + jar_name).read()  
-        checksum = urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
+        data = urllib2.urlopen(jar_url).read() # binary
+        checksum = urllib2.urlopen(jar_url + '.sha256').read().decode().split(' ')[0]
         current = hashlib.sha256(data).hexdigest()
         if not current == checksum:
             raise RuntimeError('downloaded jar has invalid checksum.'
                                ' Is:\n"%s"\nShould be:\n"%s"' % (current, checksum))
         # write jar to pystallone/
         file = open(dest, 'w')
-        file.write(data)
+        file.write(str(data))
         print("finished")
     except IOError as ioe:
         print("error during download/saving jar:\n", ioe)
@@ -44,7 +46,9 @@ def download_library():
         print("error during validation:\n", re)
         sys.exit(2)
     except Exception as e:
-        print("unknown exception occurred:\n", e)
+        import traceback
+        print("unknown exception occurred:\n")
+        print(traceback.format_exc())
         sys.exit(3)
 
 
