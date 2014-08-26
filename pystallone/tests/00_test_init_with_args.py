@@ -1,6 +1,6 @@
-import unittest
+import unittest2
 
-class TestInitWithArgs(unittest.TestCase):
+class TestInitWithArgs(unittest2.TestCase):
     
     def testWithArgsExtendClassPath(self):
         import pystallone

@@ -3,12 +3,12 @@ Created on 22.01.2014
 
 @author: marscher
 '''
-import unittest
+import unittest2
 
 import pystallone as st
 import numpy as np
 
-class TestPyStallone(unittest.TestCase):
+class TestPyStallone(unittest2.TestCase):
     
     @classmethod
     def setUpClass(cls):
@@ -61,7 +61,7 @@ class TestPyStallone(unittest.TestCase):
         b = st.ndarray_to_stallone_array(a)
         self.convertToNPandCompare(b, a, True)
         
-    @unittest.expectedFailure # since stallone only maps int32, input converted.
+    @unittest2.expectedFailure # since stallone only maps int32, input converted.
     def testConversionND_Int64(self):
         a = self.a.astype(np.int64)
         b = st.ndarray_to_stallone_array(a)
@@ -103,7 +103,7 @@ class TestPyStallone(unittest.TestCase):
         b = st.stallone_array_to_ndarray(a)
         self.compareNP(self.a, b)
 
-    @unittest.expectedFailure # known to be broken...
+    @unittest2.expectedFailure # known to be broken...
     def testDirectBufferFloat(self):
         stArr = st.ndarray_to_stallone_array(self.a, copy=False)
         # make change in self.a and see if its reflected in stallone array

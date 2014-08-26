@@ -72,6 +72,7 @@ metadata = dict(
                                     'include/jni_md.h']},
     install_requires = [jpype_species,
                         'numpy >= 1.6.0'],
+    tests_requires = ['unittest2'],
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
     classifiers = [
