@@ -105,15 +105,6 @@ def startJVM(jvm = None, args = None):
             raise RuntimeError('stallone jar not found! Expected it here: %s' 
                            % stallone_jar_file)
         
-        """
-    -cp <class search path of directories and zip/jar files>
-    -classpath <class search path of directories and zip/jar files>
-                  A : separated list of directories, JAR archives,
-                  and ZIP archives to search for class files.
-    -D<name>=<value>
-                  set a system property
-                  TODO: figure out how cp is set in jp (hopefully only 1 way supported 
-        """
         cp_extended = False
         n = len(args) if hasattr(args, '__len__') else 0
 
@@ -143,14 +134,11 @@ def startJVM(jvm = None, args = None):
     args = append_to_classpath(args)
     _startJVM(jvm, *args)
     
-    try:
-        stallone = JPackage('stallone')
-        API = stallone.api.API
-        if type(API).__name__ != 'stallone.api.API$$Static':
-            raise RuntimeError('Stallone package initialization borked. Check your JAR/classpath!') 
-    except Exception:
-        _log.exception('initialization went wrong')
-        raise
+    stallone = JPackage('stallone')
+    API = stallone.api.API
+    if type(API).__name__ != 'stallone.api.API$$Static':
+        raise RuntimeError('Stallone package initialization borked.'
+                           'Check your JAR/classpath!') 
 
 def ndarray_to_stallone_array(pyarray, copy=True):
     """
