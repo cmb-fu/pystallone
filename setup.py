@@ -6,8 +6,7 @@ import os
 import sys
 
 # support python 2 and 3
-PY3 = (sys.version_info[0] >= 3)
-jpype_species = 'JPype1-py3>=0.5.5.2' if PY3 else 'JPype1>=0.5.5.4'
+jpype_species = 'JPype1[numpy]>=0.5.5.4' if sys.version_info[0] == 2 else 'JPype1-py3>=0.5.5.2'
 
 # java library
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
@@ -19,18 +18,17 @@ def read(filename):
 
 def download_library():
     import hashlib
-    if sys.version_info >= (3,):
-        import urllib.request as urllib2
-    else:
-        import urllib2
+    try:
+        from urllib.request import urlopen
+    except ImportError:
+        from urllib2 import urlopen
 
     print("downloading current jar library to %s" % dest)
     # TODO: move destination of jar to maven central and validate via gpg
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
-    jar_url = base_url + jar_name
     try:
-        data = urllib2.urlopen(jar_url).read() # binary
-        checksum = urllib2.urlopen(jar_url + '.sha256').read().decode().split(' ')[0]
+        data = urlopen(base_url + jar_name).read()  
+        checksum = urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
         current = hashlib.sha256(data).hexdigest()
         if not current == checksum:
             raise RuntimeError('downloaded jar has invalid checksum.'
@@ -57,6 +55,12 @@ if not os.path.exists(dest):
     if not os.path.exists(dest):
         raise Exception("still not there - going to die... ^_^")
 
+from setuptools.command.test import test
+class testing(test):
+    def run(self):
+        import nose
+        nose.run(module="pystallone")
+
 metadata = dict(
     name = 'pystallone',
     version = '1.0-SNAPSHOT',
@@ -72,7 +76,8 @@ metadata = dict(
                                     'include/jni_md.h']},
     install_requires = [jpype_species,
                         'numpy >= 1.6.0'],
-    tests_requires = ['unittest2'],
+    tests_require = ['unittest2', 'nose'],
+    cmdclass = {'test' : testing},
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
     classifiers = [
@@ -100,6 +105,5 @@ metadata = dict(
 # NOTE: this temporarily overrides an existing set JAVA_HOME, if you want to avoid
 # this, comment this line! 
 os.environ['JAVA_HOME'] = os.path.abspath(os.path.join('pystallone', 'include'))
-
 
 setup(**metadata)
