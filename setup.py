@@ -59,7 +59,10 @@ from setuptools.command.test import test
 class testing(test):
     def run(self):
         import nose
-        nose.run(module="pystallone")
+        nose.run(module="pystallone", argv=['--debug'])
+
+runtime_deps = [jpype_species,
+                'numpy >= 1.6.0']
 
 metadata = dict(
     name = 'pystallone',
@@ -71,12 +74,9 @@ metadata = dict(
     maintainer = 'Martin K. Scherer',
     author_email = 'stallone@lists.fu-berlin.de',
     packages = ['pystallone'],
-    package_data = {'pystallone' : [jar_name,
-                                    'include/jni.h',
-                                    'include/jni_md.h']},
-    install_requires = [jpype_species,
-                        'numpy >= 1.6.0'],
-    tests_require = ['unittest2', 'nose'],
+    package_data = {'pystallone' : [jar_name]},
+    install_requires = runtime_deps,
+    tests_require = ['unittest2', 'nose'] + runtime_deps,
     cmdclass = {'test' : testing},
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
@@ -100,10 +100,5 @@ metadata = dict(
     ],
 )
 
-# HACK for JPype installation:
-# we do not want the user to install a complete JDK, so we provide jni.h here.
-# NOTE: this temporarily overrides an existing set JAVA_HOME, if you want to avoid
-# this, comment this line! 
-os.environ['JAVA_HOME'] = os.path.abspath(os.path.join('pystallone', 'include'))
 
 setup(**metadata)

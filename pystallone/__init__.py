@@ -84,6 +84,10 @@ def startJVM(jvm = None, args = None):
     
     if not jvm:
         jvm = getDefaultJVMPath()
+
+    print jvm
+    if not os.path.exists(jvm):
+        raise RuntimeError('jvm path "%s" does not exist!' % jvm)
         
     if not args:
         args = []
@@ -113,7 +117,7 @@ def startJVM(jvm = None, args = None):
         
         # search for classpath definition and extend it, if found.
         for i in range(n):
-            cp_ind = args[i].find('-Djava.class.path=')# or args[i].find('cp')
+            cp_ind = args[i].find('-Djava.class.path=')
             # append stallone jar to classpath
             if cp_ind != -1:
                 # find end of classpath
@@ -133,7 +137,7 @@ def startJVM(jvm = None, args = None):
     
     args = append_to_classpath(args)
     _startJVM(jvm, *args)
-    
+
     stallone = JPackage('stallone')
     API = stallone.api.API
     if type(API).__name__ != 'stallone.api.API$$Static':

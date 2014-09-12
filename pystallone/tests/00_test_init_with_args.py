@@ -4,7 +4,7 @@ class TestInitWithArgs(unittest2.TestCase):
     
     def testWithArgsExtendClassPath(self):
         import pystallone
-        args = ['-Xms64m', '-Djava.class.path=/dev/null']
+        args = ['-Xms64m']#, '-Djava.class.path=.']
         jvm = None
         
         pystallone.startJVM(jvm, args)
