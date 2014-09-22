@@ -76,6 +76,7 @@ metadata = dict(
                         'numpy >= 1.6.0'],
     tests_require = ['unittest2', 'nose'],
     cmdclass = {'test' : testing},
+    zip_safe=False,
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
     classifiers = [
