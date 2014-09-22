@@ -59,10 +59,7 @@ from setuptools.command.test import test
 class testing(test):
     def run(self):
         import nose
-        nose.run(module="pystallone", argv=['--debug'])
-
-runtime_deps = [jpype_species,
-                'numpy >= 1.6.0']
+        nose.run(module="pystallone")
 
 metadata = dict(
     name = 'pystallone',
@@ -75,8 +72,9 @@ metadata = dict(
     author_email = 'stallone@lists.fu-berlin.de',
     packages = ['pystallone'],
     package_data = {'pystallone' : [jar_name]},
-    install_requires = runtime_deps,
-    tests_require = ['unittest2', 'nose'] + runtime_deps,
+    install_requires = [jpype_species,
+                        'numpy >= 1.6.0'],
+    tests_require = ['unittest2', 'nose'],
     cmdclass = {'test' : testing},
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
@@ -100,5 +98,8 @@ metadata = dict(
     ],
 )
 
+# do not install requirements on readthedocs
+if os.environ.get('READTHEDOCS'):
+    metadata['install_requirements'] = []
 
 setup(**metadata)
