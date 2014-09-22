@@ -269,5 +269,4 @@ class Mock(MagicMock):
             return Mock()
 
 MOCK_MODULES = ['jpype','numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
