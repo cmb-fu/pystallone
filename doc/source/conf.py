@@ -260,8 +260,13 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
-# mock some modules
-import mock
+
+# mock some modules which contain c-extensions, which we can not build on RTD.
+from mock import MagicMock
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return Mock()
 
 MOCK_MODULES = ['jpype','numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'scipy.interpolate']
 for mod_name in MOCK_MODULES:
