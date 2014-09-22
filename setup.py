@@ -100,6 +100,6 @@ metadata = dict(
 
 # do not install requirements on readthedocs
 if os.environ.get('READTHEDOCS'):
-    metadata['install_requirements'] = []
+    metadata['install_requires'] = []
 
 setup(**metadata)
