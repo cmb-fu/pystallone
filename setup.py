@@ -1,17 +1,40 @@
 """
 PyStallone setup
 """
-from setuptools import setup 
+from setuptools import setup
 import os
 import sys
 
+CLASSIFIERS="""\
+Development Status :: 4 - Beta
+Environment :: Console
+Intended Audience :: Science/Research
+License :: OSI Approved :: BSD License
+Natural Language :: English
+Operating System :: MacOS :: MacOS X
+Operating System :: POSIX :: Linux
+Programming Language :: Java
+Programming Language :: Python :: 2.6
+Programming Language :: Python :: 2.7
+Programming Language :: Python :: 3
+Topic :: Scientific/Engineering :: Bio-Informatics
+Topic :: Scientific/Engineering :: Chemistry
+Topic :: Scientific/Engineering :: Mathematics
+Topic :: Scientific/Engineering :: Physics
+Topic :: Software Development :: Libraries :: Java Libraries
+
+"""
+
+
 # support python 2 and 3
-jpype_species = 'JPype1[numpy]>=0.5.5.4' if sys.version_info[0] == 2 else 'JPype1-py3>=0.5.5.2'
+# TODO: recover code to handle python lists as array
+jpype_species = 'JPype1[numpy]>=0.5.6' if sys.version_info[0] == 2 else \
+                'JPype1-py3>=0.5.5.2'
 
 # java library
 jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
 
-dest = os.path.abspath(os.path.join(os.getcwd(),'pystallone', jar_name))
+dest = os.path.abspath(os.path.join(os.getcwd(), 'pystallone', jar_name))
 
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
@@ -27,7 +50,7 @@ def download_library():
     # TODO: move destination of jar to maven central and validate via gpg
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
     try:
-        data = urlopen(base_url + jar_name).read()  
+        data = urlopen(base_url + jar_name).read()
         checksum = urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
         current = hashlib.sha256(data).hexdigest()
         if not current == checksum:
@@ -63,7 +86,7 @@ class testing(test):
 
 metadata = dict(
     name = 'pystallone',
-    version = '1.0-SNAPSHOT',
+    version = '1.0-SNAPSHOT.2',
     description = 'Python binding for Stallone java library',
     long_description = read('README.rst'),
     url = 'http://bitbucket.org/cmb-fu/stallone',
@@ -79,24 +102,7 @@ metadata = dict(
     zip_safe=False,
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
-    classifiers = [
-        'Development Status :: 4 - Beta',
-        'Environment :: Console',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Natural Language :: English',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: Java',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Topic :: Scientific/Engineering :: Bio-Informatics',
-        'Topic :: Scientific/Engineering :: Chemistry',
-        'Topic :: Scientific/Engineering :: Mathematics',
-        'Topic :: Scientific/Engineering :: Physics',
-        'Topic :: Software Development :: Libraries :: Java Libraries'
-    ],
+    classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],               
 )
 
 # do not install requirements on readthedocs
