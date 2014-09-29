@@ -166,11 +166,13 @@ def ndarray_to_stallone_array(pyarray, copy=True):
     scipy.sparse types will be currently converted to dense, before passing
     them to the java side!
     """
-    if type(pyarray) != type(_np.ndarray):
-        raise TypeError('only numpy arrays supported.')
+    if not isinstance(pyarray, _np.ndarray):
+        raise TypeError('Only numpy arrays supported. Given type was "%s"' 
+                        % type(pyarray))
     
     if pyarray.dtype not in _supported_types:
-        raise TypeError('Given type %s not mapped in stallone library' % pyarray.dtype)
+        raise TypeError('Given type %s not mapped in stallone library' 
+                        % pyarray.dtype)
     
     """
     from scipy.sparse.base import issparse

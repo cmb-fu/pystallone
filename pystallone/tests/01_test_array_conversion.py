@@ -14,7 +14,7 @@ class TestPyStallone(unittest2.TestCase):
     def setUpClass(cls):
         super(TestPyStallone, cls).setUpClass()
         if not st.isJVMStarted():
-            st.startJVM(None, [])
+            st.startJVM()
 
     def setUp(self):
         # setup a random numpy array for each test case
