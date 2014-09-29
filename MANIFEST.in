@@ -2,3 +2,4 @@ graft doc/
 prune doc/build
 include LICENSE.rst
 include pystallone/*.jar
+include pystallone/tests/*.py

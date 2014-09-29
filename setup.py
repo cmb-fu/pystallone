@@ -1,9 +1,9 @@
 """
 PyStallone setup
 """
-from setuptools import setup
-import os
 import sys
+import os
+from setuptools import setup
 
 CLASSIFIERS="""\
 Development Status :: 4 - Beta
@@ -78,11 +78,6 @@ if not os.path.exists(dest):
     if not os.path.exists(dest):
         raise Exception("still not there - going to die... ^_^")
 
-from setuptools.command.test import test
-class testing(test):
-    def run(self):
-        import nose
-        nose.run(module="pystallone")
 
 metadata = dict(
     name = 'pystallone',
@@ -98,7 +93,7 @@ metadata = dict(
     install_requires = [jpype_species,
                         'numpy >= 1.6.0'],
     tests_require = ['unittest2', 'nose'],
-    cmdclass = {'test' : testing},
+    test_suite='nose.collector',
     zip_safe=False,
     keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
