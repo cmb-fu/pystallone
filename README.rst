@@ -3,7 +3,9 @@ PyStallone
 ==========
 
 .. image:: https://travis-ci.org/cmb-fu/pystallone.svg
-   :target:  http://travis-ci.org/cmb-fu/pystallone
+   :target:  https://travis-ci.org/cmb-fu/pystallone
+.. image:: https://readthedocs.org/projects/pystallone/badge/?version=latest
+   :target: https://pystallone.readthedocs.org/en/latest/
 
 This package is a Python binding for the Stallone Java library, which is an 
 effort to combine multiple tools for building Markov models from molecular
