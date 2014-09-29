@@ -31,7 +31,7 @@ install:
   # create conda env with numpy installed
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy
   - source activate test-environment
-  - pip install .
+  - pip install -rtest-requirements.txt .
 
 # command to run tests
 script: cd pystallone/tests && nosetests
