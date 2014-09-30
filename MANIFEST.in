@@ -3,4 +3,5 @@ prune doc/build
 include LICENSE.rst
 include pystallone/*.jar
 include pystallone/tests/*.py
-versioneer.py
+include pystallone/_version.py
+include versioneer.py

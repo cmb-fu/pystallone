@@ -49,6 +49,11 @@ import numpy as _np
 import sys as _sys
 import warnings as _warnings
 
+
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
+
 _64bit = _sys.maxsize > 2**32
 del _sys
 
@@ -366,3 +371,4 @@ def jarray(a):
         return list_to_jarray(a.tolist())
     else:
         raise TypeError("Type '%s' is not supported for conversion to java array" % type(a))
+
