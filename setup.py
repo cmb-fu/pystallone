@@ -5,7 +5,7 @@ import sys
 import os
 from setuptools import setup
 
-CLASSIFIERS="""\
+CLASSIFIERS = """\
 Development Status :: 4 - Beta
 Environment :: Console
 Intended Audience :: Science/Research
@@ -36,8 +36,10 @@ jar_name = 'stallone-1.0-SNAPSHOT-jar-with-dependencies.jar'
 
 dest = os.path.abspath(os.path.join(os.getcwd(), 'pystallone', jar_name))
 
+
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
+
 
 def download_library():
     import hashlib
@@ -51,7 +53,8 @@ def download_library():
     base_url = 'http://www.mi.fu-berlin.de/users/marscher/'
     try:
         data = urlopen(base_url + jar_name).read()
-        checksum = urlopen(base_url + jar_name + '.sha256').read().split(' ')[0]
+        checksum = urlopen(
+            base_url + jar_name + '.sha256').read().split(' ')[0]
         current = hashlib.sha256(data).hexdigest()
         if not current == checksum:
             raise RuntimeError('downloaded jar has invalid checksum.'
@@ -79,25 +82,34 @@ if not os.path.exists(dest):
         raise Exception("still not there - going to die... ^_^")
 
 
+import versioneer
+versioneer.VCS = 'git'
+versioneer.versionfile_source = 'pystallone/_version.py'
+versioneer.versionfile_build = None
+versioneer.tag_prefix = ''  # tags are like 1.2.0
+versioneer.parentdir_prefix = 'pystallone-'  # dirname like 'myproject-1.2.0'
+
+
 metadata = dict(
-    name = 'pystallone',
-    version = '1.0-SNAPSHOT.2',
-    description = 'Python binding for Stallone java library',
-    long_description = read('README.rst'),
-    url = 'http://bitbucket.org/cmb-fu/stallone',
-    author = 'Frank Noe, Martin K. Scherer',
-    maintainer = 'Martin K. Scherer',
-    author_email = 'stallone@lists.fu-berlin.de',
-    packages = ['pystallone'],
-    package_data = {'pystallone' : [jar_name]},
-    install_requires = [jpype_species,
-                        'numpy >= 1.6.0'],
-    tests_require = ['unittest2', 'nose'],
+    name='pystallone',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
+    description='Python binding for Stallone java library',
+    long_description=read('README.rst'),
+    url='http://bitbucket.org/cmb-fu/stallone',
+    author='Frank Noe, Martin K. Scherer',
+    maintainer='Martin K. Scherer',
+    author_email='stallone@lists.fu-berlin.de',
+    packages=['pystallone'],
+    package_data={'pystallone': [jar_name]},
+    install_requires=[jpype_species,
+                      'numpy >= 1.6.0'],
+    tests_require=['unittest2', 'nose'],
     test_suite='nose.collector',
     zip_safe=False,
-    keywords = ['Markov modeling', 'Molecular trajectories analysis', 'MD'],
+    keywords=['Markov modeling', 'Molecular trajectories analysis', 'MD'],
     license='Simplified BSD License',
-    classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],               
+    classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
 )
 
 # do not install requirements on readthedocs
