@@ -48,13 +48,12 @@ from jpype import \
 import numpy as _np
 import sys as _sys
 import warnings as _warnings
-
-
 from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
 
+__version__ = get_versions()['version']
 _64bit = _sys.maxsize > 2**32
+
+del get_versions
 del _sys
 
 """
@@ -90,7 +89,6 @@ def startJVM(jvm = None, args = None):
     if not jvm:
         jvm = getDefaultJVMPath()
 
-    print jvm
     if not os.path.exists(jvm):
         raise RuntimeError('jvm path "%s" does not exist!' % jvm)
         
