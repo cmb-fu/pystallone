@@ -20,4 +20,5 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-    branch: master
+    # temporary workaround for travis issue #1675
+    all_branches: true
