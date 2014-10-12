@@ -10,6 +10,10 @@ import numpy as np
 
 class TestPyStallone(unittest2.TestCase):
     
+    n = 1000
+    double_array = np.random.random(1000)
+    int_array = np.random.randint(2**31 * -1, 2**31, 1000).astype(np.int32)
+    
     @classmethod
     def setUpClass(cls):
         super(TestPyStallone, cls).setUpClass()
@@ -18,8 +22,7 @@ class TestPyStallone(unittest2.TestCase):
 
     def setUp(self):
         # setup a random numpy array for each test case
-        self.n = 1000
-        self.a = np.random.random(self.n)
+        self.a = TestPyStallone.double_array.copy()
 
     def convertToNPandCompare(self, stArray, npArray, skipDataTypeCheck=False):
         """
@@ -103,12 +106,20 @@ class TestPyStallone(unittest2.TestCase):
         b = st.stallone_array_to_ndarray(a)
         self.compareNP(self.a, b)
 
-    @unittest2.expectedFailure # known to be broken...
     def testDirectBufferFloat(self):
         stArr = st.ndarray_to_stallone_array(self.a, copy=False)
         # make change in self.a and see if its reflected in stallone array
         self.a[0] = 42
-        self.assertEqual(42, stArr.get(0))
+        self.assertEqual(self.a[0], stArr.get(0))
+
+    def testDirectBufferInt(self):
+        self.a = TestPyStallone.int_array.copy()
+        stArr = st.ndarray_to_stallone_array(self.a, copy=False)
+        self.a[0] = 42
+        self.assertEqual(self.a[0], stArr.get(0))
+
+        for i in xrange(1, len(self.a)):
+            self.assertEqual(self.a[i], stArr.get(i))
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest2.main()

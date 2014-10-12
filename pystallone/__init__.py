@@ -188,9 +188,8 @@ def ndarray_to_stallone_array(pyarray, copy=True):
     dtype = pyarray.dtype
     factory = None
     cast_func = None
-    """
-    stallone does currently support only wrappers for int32 and float64
-    """ 
+    
+    # stallone does currently support only wrappers for int32 and float64
     if dtype == _np.float32:
         _warnings.warn("Upcasting floats to doubles!")
         pyarray = pyarray.astype(_np.float64)
@@ -204,17 +203,18 @@ def ndarray_to_stallone_array(pyarray, copy=True):
     if dtype == _np.float32 or dtype == _np.float64:
         factory = API.doublesNew
         cast_func = JDouble
-        if not copy:
-            # TODO: add impl for int if ready in stallone.
-            if not pyarray.flags.c_contiguous:
-                raise RuntimeError('Can only pass contiguous memory to Java!')
-            jbuff = _nio.convertToDirectBuffer(pyarray).asDoubleBuffer()
-            rows = shape[0]
-            cols = 1 if len(shape) == 1 else shape[1]
-            return factory.arrayFrom(jbuff, rows, cols)
+
     elif dtype == _np.int32 or dtype == _np.int64:
         factory = API.intsNew
         cast_func = JInt
+        
+    if not copy:
+        if not pyarray.flags.c_contiguous:
+            raise RuntimeError('Can only pass contiguous memory to Java!')
+        jbuff = _nio.convertToDirectBuffer(pyarray)
+        rows = shape[0]
+        cols = 1 if len(shape) == 1 else shape[1]
+        return factory.arrayFrom(jbuff, rows, cols)
 
     if len(shape) == 1:
         # create a JArray wrapper
