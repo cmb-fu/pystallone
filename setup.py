@@ -28,7 +28,7 @@ Topic :: Software Development :: Libraries :: Java Libraries
 
 # support python 2 and 3
 # TODO: recover code to handle python lists as array
-jpype_species = 'JPype1[numpy]>=0.5.6' if sys.version_info[0] == 2 else \
+jpype_species = 'JPype1>=0.5.6' if sys.version_info[0] == 2 else \
                 'JPype1-py3>=0.5.5.2'
 
 # java library
