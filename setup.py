@@ -86,7 +86,7 @@ import versioneer
 versioneer.VCS = 'git'
 versioneer.versionfile_source = 'pystallone/_version.py'
 versioneer.versionfile_build = None
-versioneer.tag_prefix = ''  # tags are like 1.2.0
+versioneer.tag_prefix = 'v'  # tags are like v1.2.0
 versioneer.parentdir_prefix = 'pystallone-'  # dirname like 'myproject-1.2.0'
 
 
