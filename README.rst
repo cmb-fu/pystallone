@@ -24,4 +24,4 @@ It provides a high level API for:
 
 
 For more information have a look at the current Stallone website:
-http://github.com/cmb-fu/stallone
+http://github.com/markovmodel/pystallone
