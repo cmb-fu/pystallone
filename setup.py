@@ -82,7 +82,13 @@ if not os.path.exists(dest):
         raise Exception("still not there - going to die... ^_^")
 
 
-import versioneer
+import imp
+fp, pathname, description = imp.find_module('versioneer')
+try:
+    versioneer = imp.load_module('versioneer', fp, pathname, description)
+finally:
+    if fp: fp.close()
+
 versioneer.VCS = 'git'
 versioneer.versionfile_source = 'pystallone/_version.py'
 versioneer.versionfile_build = None
