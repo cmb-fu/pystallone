@@ -2,7 +2,7 @@ graft doc/
 prune doc/build
 include LICENSE.rst
 include README.rst
-include pystallone/*.jar
+#include pystallone/*.jar
 include pystallone/tests/*.py
 include pystallone/_version.py
 include versioneer.py
