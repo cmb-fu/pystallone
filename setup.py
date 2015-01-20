@@ -30,7 +30,7 @@ jpype_species = 'JPype1>=0.5.6' if sys.version_info[0] == 2 else \
                 'JPype1-py3>=0.5.5.2'
   
 # same as git tag of stallone on github, change this on new release of stallone
-stallone_version = u'v1.0-test10'
+stallone_version = u'v1.0'
 
 # java library
 jar_name = 'stallone-%s-jar-with-dependencies.jar' % stallone_version
